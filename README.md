@@ -157,14 +157,14 @@ Example: /stocks/ownerCount/5
 
 
 📌 Database Schema
-Column Name	Data Type	Description
+Column Name	           Data Type	            Description
 stockId (Primary)	INT (Auto Increment)	Unique stock identifier
-stockName (Unique)	VARCHAR(255)	Stock name
-stockPrice	DOUBLE	Price of the stock
-stockOwnerCount	INT	Number of stock owners
-stockType	ENUM	Type of stock (e.g., ENERGY, TECH)
-stockMarketCap	DOUBLE	Market capitalization of the stock
-stockBirthTimeStamp	DATETIME	Timestamp of stock creation
+stockName (Unique)	VARCHAR(255)	        Stock name
+stockPrice	          DOUBLE	            Price of the stock
+stockOwnerCount	      INT	                Number of stock owners
+stockType	         ENUM	                Type of stock (e.g., ENERGY, TECH)
+stockMarketCap	     DOUBLE	                Market capitalization of the stock
+stockBirthTimeStamp	 DATETIME	            Timestamp of stock creation
 
 
 📌 Database Configuration (H2 for Local Development)
