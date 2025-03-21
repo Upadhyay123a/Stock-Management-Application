@@ -8,7 +8,7 @@ The **Stock Management Application** is a **Spring Boot-based CRUD** application
 
 This document provides insights into the **application’s architecture, endpoints, data flow, and database configuration** to help developers and stakeholders understand its functionality.  
 
----
+--- 
 
 ## 📌 Table of Contents  
 1. [Technologies Used](#-technologies-used)  
