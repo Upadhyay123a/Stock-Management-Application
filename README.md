@@ -2,6 +2,7 @@
 **Java | Spring Boot | Maven | REST API | H2 Database**  
 
 ---     
+
 ## 📖 Overview  
 The **Stock Management Application** is a **Spring Boot-based CRUD** application designed to efficiently manage stocks. It allows users to **add, update, retrieve, and delete stock data** while ensuring seamless database interaction.  
 
