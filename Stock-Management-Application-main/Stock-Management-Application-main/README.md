@@ -1,4 +1,4 @@
-<h1 align="center"> Stock Management Application </h1> 
+<h1 align="center"> Stock Management Application </h1>  
 <p align="center">
 <a href="Java url">
     <img alt="Java" src="https://img.shields.io/badge/Java->=8-darkblue.svg" />
