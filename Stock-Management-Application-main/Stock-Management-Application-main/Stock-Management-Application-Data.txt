@@ -1,4 +1,4 @@
-  
+   
 
 1. Create the Stocks Table:
 
