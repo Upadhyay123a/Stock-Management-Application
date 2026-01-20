@@ -1,8 +1,8 @@
 package com.example.geekster.project.StockManagementApplication.Service;
 
-import com.example.StockManagementApplication.model.Stock;
-import com.example.StockManagementApplication.model.StockType;
-import com.example.StockManagementApplication.repository.IStockRepository;
+import com.example.geekster.project.StockManagementApplication.Model.Stock;
+import com.example.geekster.project.StockManagementApplication.Model.StockType;
+import com.example.geekster.project.StockManagementApplication.Repository.IStockRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class StockService {
     @Autowired
-    IStockRepository stockRepo;
+    IStockRepo stockRepo;
 
     //custom finder
     public List<Stock> getStocksByType(StockType stockType) {

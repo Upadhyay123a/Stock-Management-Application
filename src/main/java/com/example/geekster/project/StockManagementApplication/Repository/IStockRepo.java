@@ -1,6 +1,6 @@
 package com.example.geekster.project.StockManagementApplication.Repository;
 
-import com.example.StockManagementApplication.model.Stock;
+import com.example.geekster.project.StockManagementApplication.Model.Stock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface IStockRepository extends CrudRepository<Stock,Integer> {
+public interface IStockRepo extends CrudRepository<Stock,Integer> {
 
     List<Stock> findByStockPriceGreaterThanAndStockBirthTimeStampLessThanOrderByStockName(Double price, LocalDateTime date);
 
