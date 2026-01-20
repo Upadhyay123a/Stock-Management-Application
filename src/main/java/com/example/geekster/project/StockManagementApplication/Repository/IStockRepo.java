@@ -1,46 +1,42 @@
 package com.example.geekster.project.StockManagementApplication.Repository;
 
-import com.example.geekster.project.StockManagementApplication.Model.Stock;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import com.example.geekster.project.StockManagementApplication.Model.Stock;
+import com.example.geekster.project.StockManagementApplication.Model.StockType;
+
 @Repository
-public interface IStockRepo extends CrudRepository<Stock,Integer> {
+public interface IStockRepo extends JpaRepository<Stock, Integer> {
 
-    List<Stock> findByStockPriceGreaterThanAndStockBirthTimeStampLessThanOrderByStockName(Double price, LocalDateTime date);
+    // Get stocks by type
+    List<Stock> findByStockType(StockType stockType);
 
-    List<Stock> findBy();
+    // Get stocks above price and before date
+    List<Stock> findByStockPriceGreaterThanAndStockBirthTimeStampLessThanOrderByStockName(
+            Double price, LocalDateTime date);
 
-    //custom queries : native
-
-    //basic select :
-
-    @Query(value = "select * from STOCK where STOCK_MARKET_CAP > :capPercentage" , nativeQuery = true)
-    List<Stock> getAllStocksAboveMarketCap(Double capPercentage);
-
-    //update using custom query
-
+    // Update market cap
     @Modifying
-    @Query(value = "update STOCK set STOCK_MARKET_CAP = :capPercentage where Stock_id = :id" , nativeQuery = true)
-    void updateMarketCapById(Double capPercentage, Integer id);
+    @Query("update Stock s set s.stockMarketCap = :cap where s.stockId = :id")
+    void updateMarketCapById(@Param("cap") Double cap, @Param("id") Integer id);
 
+    // Delete by owner count
     @Modifying
-    @Query(value = "Delete from Stock where Stock_owner_count <= :clientCount" , nativeQuery = true)
-    void deleteStocksBasedOnCount(Integer clientCount);
+    @Query("delete from Stock s where s.stockOwnerCount <= :count")
+    void deleteStocksBasedOnCount(@Param("count") Integer count);
 
-
+    // Update stock fully by ID
     @Modifying
-    @Query(value = "update stock set STOCK_TYPE = :myType where Stock_id = :id", nativeQuery = true)
-    void modifyStockTypeById( String myType,Integer id);
-
-
-    @Modifying
-    @Query(value = "update stock set stock_id = :stockId, stock_name = :stockName, stock_price= :stockPrice, stock_Birth_Time_Stamp =:stockBirthTimeStamp where stock_id = :id",nativeQuery = true)
-    void updateStockById(Integer id, Integer stockId, String stockName, Double stockPrice, LocalDateTime stockBirthTimeStamp);
-
+    @Query("update Stock s set s.stockName=:#{#stock.stockName}, s.stockPrice=:#{#stock.stockPrice}, " +
+           "s.stockOwnerCount=:#{#stock.stockOwnerCount}, s.stockType=:#{#stock.stockType}, " +
+           "s.stockMarketCap=:#{#stock.stockMarketCap}, s.stockBirthTimeStamp=:#{#stock.stockBirthTimeStamp} " +
+           "where s.stockId = :id")
+    void updateStockById(@Param("id") Integer id, @Param("stock") Stock stock);
 }

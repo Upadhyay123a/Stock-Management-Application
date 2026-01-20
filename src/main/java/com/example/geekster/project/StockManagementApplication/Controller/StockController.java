@@ -1,6 +1,5 @@
 package com.example.geekster.project.StockManagementApplication.Controller;
 
-
 import com.example.geekster.project.StockManagementApplication.Model.Stock;
 import com.example.geekster.project.StockManagementApplication.Model.StockType;
 import com.example.geekster.project.StockManagementApplication.Service.StockService;
@@ -11,69 +10,58 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "stock")
+@RequestMapping("/stocks")
 public class StockController {
 
     @Autowired
-    StockService stockService;
+    private StockService stockService;
 
-    // get Stocks by type
-    @GetMapping("/by-type/{stockType}")
+    // GET: Stocks by type
+    @GetMapping("/type/{stockType}")
     public ResponseEntity<List<Stock>> getStocksByType(@PathVariable StockType stockType) {
         List<Stock> stocks = stockService.getStocksByType(stockType);
-        if (stocks.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.ok(stocks);
-        }
+        return stocks.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(stocks);
     }
 
-    //get using custom finder
-    @GetMapping(value = "abovePrice/price/{price}/lowerDate/date/{date}")
-    public List<Stock> getStocksAbovePriceAndLowerDate(@PathVariable Double price,@PathVariable String date)
-    {
-        return stockService.getStocksAbovePriceAndLowerDate(price,date);
+    // GET: Stocks above price and before date
+    @GetMapping("/filter")
+    public ResponseEntity<List<Stock>> getStocksAbovePriceAndLowerDate(
+            @RequestParam Double price,
+            @RequestParam String date) {
+
+        return ResponseEntity.ok(stockService.getStocksAbovePriceAndLowerDate(price, date));
     }
 
-    //custom query
-    @GetMapping(value = "/cap/{capPercentage}")
-    public List<Stock> getAllStocksAboveMarketCap(@PathVariable Double capPercentage)
-    {
-        return stockService.getAllStocksAboveMarketCap(capPercentage);
+    // POST: Add new stocks
+    @PostMapping
+    public ResponseEntity<String> addStocks(@RequestBody List<Stock> stocks) {
+        return ResponseEntity.ok(stockService.addStocks(stocks));
     }
 
-    //post
-    @PostMapping(value = "/stocks")
-    public String insertStocks(@RequestBody List<Stock> stockList)
-    {
-        return stockService.addStocks(stockList);
+    // PUT: Update market cap
+    @PutMapping("/{id}/market-cap")
+    public ResponseEntity<Void> updateMarketCap(
+            @PathVariable Integer id,
+            @RequestParam Double marketCap) {
+
+        stockService.updateMarketCap(marketCap, id);
+        return ResponseEntity.noContent().build();
     }
 
-    //put
-    @PutMapping(value = "/marketCap/{marketCap}/id/{id}")
-    public void insertStocks(@PathVariable Double marketCap, @PathVariable Integer id)
-    {
-        stockService.updateMarketCap(marketCap,id);
+    // PUT: Update full stock by ID
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateStockById(
+            @PathVariable Integer id,
+            @RequestBody Stock stock) {
+
+        stockService.updateStockById(id, stock);
+        return ResponseEntity.noContent().build();
     }
 
-    //PUT USING CUSTOM QUERY :
-    @PutMapping(value = "/stock/type/id")
-    public void updateTypeById(@RequestParam StockType stockType, @RequestParam Integer id)
-    {
-        stockService.updateTypeById(stockType,id);
-    }
-
-    //put using Cq : stock, id
-    @PutMapping(value = "/stock/{id}")
-    public void updateStockById(@PathVariable Integer id, @RequestBody Stock myStock)
-    {
-        stockService.updateStockById(id,myStock);
-    }
-
-    //DELETE
-    @DeleteMapping(value = "/ownerCount/{count}")
-    public void removeStocksByOwnerCount(@PathVariable  Integer count)
-    {
+    // DELETE: Stocks by owner count
+    @DeleteMapping("/owner-count/{count}")
+    public ResponseEntity<Void> deleteByOwnerCount(@PathVariable Integer count) {
         stockService.deleteStocksBasedOnCount(count);
+        return ResponseEntity.noContent().build();
     }
 }
